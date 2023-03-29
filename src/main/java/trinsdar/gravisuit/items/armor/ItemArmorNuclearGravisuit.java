@@ -19,6 +19,7 @@ import ic2.core.util.obj.ToolTipType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -147,6 +148,11 @@ public class ItemArmorNuclearGravisuit extends ItemArmorQuantumSuit implements I
         } else {
             StackUtil.getOrCreateNbtData(stack).setInteger("GuiID", id);
         }
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return EnumRarity.EPIC;
     }
 
     @Optional.Method(modid = "ic2c_extras")
@@ -299,6 +305,11 @@ public class ItemArmorNuclearGravisuit extends ItemArmorQuantumSuit implements I
 
         public static String playerKey(EntityPlayer player) {
             return player.getGameProfile().getName() + ":" + player.getEntityWorld().isRemote;
+        }
+
+        @Override
+        public EnumRarity getRarity(ItemStack stack) {
+            return EnumRarity.EPIC;
         }
 
         @SubscribeEvent

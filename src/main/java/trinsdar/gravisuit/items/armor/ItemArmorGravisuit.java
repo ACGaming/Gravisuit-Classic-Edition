@@ -16,6 +16,7 @@ import ic2.core.util.obj.ToolTipType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -100,6 +101,11 @@ public class ItemArmorGravisuit extends ItemArmorQuantumSuit implements IIndirec
         ItemStack legs = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
 
         return !legs.isEmpty() && legs.getItem() instanceof ItemArmorQuantumSuit;
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return EnumRarity.EPIC;
     }
 
     public ItemArmorJetpackBase getJetpack() {
@@ -240,6 +246,11 @@ public class ItemArmorGravisuit extends ItemArmorQuantumSuit implements IIndirec
 
         public static String playerKey(EntityPlayer player) {
             return player.getGameProfile().getName() + ":" + player.getEntityWorld().isRemote;
+        }
+
+        @Override
+        public EnumRarity getRarity(ItemStack stack) {
+            return EnumRarity.EPIC;
         }
 
         @SubscribeEvent

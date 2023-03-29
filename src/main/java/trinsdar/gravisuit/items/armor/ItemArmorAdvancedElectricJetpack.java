@@ -6,6 +6,7 @@ import ic2.core.item.render.model.JetpackModel;
 import ic2.core.platform.textures.Ic2Icons;
 import ic2.core.platform.textures.models.BaseModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -86,5 +87,10 @@ public class ItemArmorAdvancedElectricJetpack extends ItemArmorCompactedElectric
     @Override
     public String getTexture() {
         return "gravisuit:textures/models/advanced_electric_jetpack";
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return EnumRarity.UNCOMMON;
     }
 }

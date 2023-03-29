@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -258,5 +259,10 @@ public class ItemToolVajra extends ItemElectricTool implements IStaticTexturedIt
     @Override
     public boolean canMineBlock(ItemStack d, IBlockState state, IBlockAccess access, BlockPos pos) {
         return ForgeHooks.canToolHarvestBlock(access, pos, d);
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return EnumRarity.EPIC;
     }
 }

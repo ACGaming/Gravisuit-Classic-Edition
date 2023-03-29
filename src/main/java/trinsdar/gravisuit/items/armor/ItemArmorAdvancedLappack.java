@@ -4,6 +4,7 @@ import ic2.core.item.armor.electric.ItemArmorElectricPack;
 import ic2.core.platform.lang.components.base.LocaleComp;
 import ic2.core.platform.textures.Ic2Icons;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -49,6 +50,11 @@ public class ItemArmorAdvancedLappack extends ItemArmorElectricPack {
     @Override
     public double getTransferLimit(ItemStack stack) {
         return maxTransfer;
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return getTier(stack) == 3 ? EnumRarity.RARE : EnumRarity.UNCOMMON;
     }
 
     @Override

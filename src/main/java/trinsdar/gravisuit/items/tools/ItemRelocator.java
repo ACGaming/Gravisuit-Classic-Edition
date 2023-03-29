@@ -12,6 +12,7 @@ import ic2.core.util.obj.ToolTipType;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -284,5 +285,10 @@ public class ItemRelocator extends BasicElectricItem implements IHandHeldInvento
             compound.setDouble("Z", z);
             compound.setInteger("Dimension", dimId);
         }
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return EnumRarity.EPIC;
     }
 }

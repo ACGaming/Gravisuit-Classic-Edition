@@ -24,6 +24,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -316,5 +317,10 @@ public class ItemToolGravitool extends ItemElectricToolPrecisionWrench implement
     @Override
     public boolean isChangingCropDrops(ItemStack itemStack) {
         return this.getDamage(itemStack) == 1;
+    }
+
+    @Override
+    public EnumRarity getRarity(ItemStack stack) {
+        return EnumRarity.UNCOMMON;
     }
 }
