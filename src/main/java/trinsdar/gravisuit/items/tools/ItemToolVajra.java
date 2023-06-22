@@ -158,17 +158,14 @@ public class ItemToolVajra extends ItemElectricTool implements IStaticTexturedIt
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack stack = player.getHeldItem(hand);
-        IBlockState blockState = world.getBlockState(pos);
-        Block block = blockState.getBlock();
-        SoundType soundType = block.getSoundType(blockState, world, pos, player);
-        if (ElectricItem.manager.getCharge(stack) >= getEnergyCost(stack) && shouldBreak(player, world, pos)){
-            ElectricItem.manager.use(stack, this.getEnergyCost(stack), player);
-            blockState.getBlock().harvestBlock(world, player, pos, blockState, world.getTileEntity(pos), stack);
-            world.playSound(null, pos, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
-            world.setBlockToAir(pos);
-            world.removeTileEntity(pos);
-            return EnumActionResult.SUCCESS;
+        if (!world.isRemote) {
+            ItemStack stack = player.getHeldItem(hand);
+            if (ElectricItem.manager.getCharge(stack) >= getEnergyCost(stack) && shouldBreak(player, world, pos)) {
+                ElectricItem.manager.use(stack, this.getEnergyCost(stack), player);
+                world.destroyBlock(pos, true);
+                world.removeTileEntity(pos);
+                return EnumActionResult.SUCCESS;
+            }
         }
         return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
     }
