@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import trinsdar.gravisuit.GravisuitClassic;
 import trinsdar.gravisuit.items.armor.ItemArmorGravisuit;
+import trinsdar.gravisuit.items.armor.ItemArmorNuclearGravisuit;
 import trinsdar.gravisuit.network.PacketRelocator;
 import trinsdar.gravisuit.util.GravisuitRecipes;
 import trinsdar.gravisuit.util.Registry;
@@ -19,6 +20,7 @@ public class CommonProxy {
         Registry.init();
         initializeNetwork();
         MinecraftForge.EVENT_BUS.register(new ItemArmorGravisuit.GravisuitJetpack(Registry.gravisuit));
+        MinecraftForge.EVENT_BUS.register(new ItemArmorNuclearGravisuit.GravisuitJetpack(Registry.nuclearGravisuit));
     }
 
     public void init(FMLInitializationEvent e) {

@@ -44,7 +44,7 @@ import java.util.Map;
 
 @Optional.Interface(iface = "trinsdar.ic2c_extras.util.INuclearJetpackLogic", modid = "ic2c_extras")
 public class ItemArmorNuclearGravisuit extends ItemArmorQuantumSuit implements ItemArmorJetpackBase.IIndirectJetpack, IHandHeldInventory, INuclearJetpackLogic {
-    GravisuitJetpack jetpack = new GravisuitJetpack(this);
+    ItemArmorNuclearGravisuit.GravisuitJetpack jetpack = new GravisuitJetpack(this);
 
     public ItemArmorNuclearGravisuit() {
         super(44, EntityEquipmentSlot.CHEST);
@@ -118,7 +118,7 @@ public class ItemArmorNuclearGravisuit extends ItemArmorQuantumSuit implements I
     public static boolean hasGravisuit(EntityPlayer player){
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 
-        return !chest.isEmpty() && chest.getItem() instanceof ItemArmorGravisuit;
+        return !chest.isEmpty() && chest.getItem() instanceof ItemArmorNuclearGravisuit;
     }
     public static boolean hasQuantumLegs(EntityPlayer player){
         ItemStack legs = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
@@ -249,7 +249,7 @@ public class ItemArmorNuclearGravisuit extends ItemArmorQuantumSuit implements I
                     nbt.setByte("JetpackTicker", jetpackTicker);
                 }
                 if (!player.capabilities.isCreativeMode && !player.isSpectator()){
-                    if (handler.quantumArmorBoostSprint && player.isSprinting() && ItemArmorGravisuit.hasQuantumLegs(player)){
+                    if (handler.quantumArmorBoostSprint && player.isSprinting() && ItemArmorNuclearGravisuit.hasQuantumLegs(player)){
                         this.useEnergy(player, stack, 1024);
                     }else {
                         this.useEnergy(player, stack, 512);
@@ -258,24 +258,23 @@ public class ItemArmorNuclearGravisuit extends ItemArmorQuantumSuit implements I
                         nbt.setBoolean("ResetFlying", true);
                     }
                 }
-                player.capabilities.allowFlying = true;
-                player.stepHeight = 1.0625F;
-                boolean flying = player.capabilities.isFlying;
-                if(flying){
-                    boolean sneaking = player.isSneaking();
+                if (player.onGround) {
+                    player.capabilities.allowFlying = true;
+                    player.stepHeight = 1.0625F;
+                    boolean flying = player.capabilities.isFlying;
+                    if (flying) {
+                        boolean sneaking = player.isSneaking();
 
-                    float speed = 0.08f
-                            * (flying ? 0.6f : 1.0f)
-                            * (sneaking ? 0.1f : 1.0f);
+                        float speed = 0.08f * (flying ? 0.6f : 1.0f) * (sneaking ? 0.1f : 1.0f);
 
-                    if (player.moveForward > 0f) {
-                        player.moveRelative(0f, 0f, 1f, speed);
-                    } else if (player.moveForward < 0f) {
-                        player.moveRelative(0f, 0f, 1f, -speed * 0.3f);
-                    }
-
-                    if (player.moveStrafing != 0f) {
-                        player.moveRelative(1f, 0f, 0f, speed * 0.5f * Math.signum(player.moveStrafing));
+                        if (player.moveForward > 0f) {
+                            player.moveRelative(0f, 0f, 1f, speed);
+                        } else if (player.moveForward < 0f) {
+                            player.moveRelative(0f, 0f, 1f, -speed * 0.3f);
+                        }
+                        if (player.moveStrafing != 0f) {
+                            player.moveRelative(1f, 0f, 0f, speed * 0.5f * Math.signum(player.moveStrafing));
+                        }
                     }
                 }
             }else {
@@ -321,7 +320,7 @@ public class ItemArmorNuclearGravisuit extends ItemArmorQuantumSuit implements I
                 NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
                 boolean disabled = nbt.getBoolean("disabled");
 
-                Boolean hasSet = ItemArmorGravisuit.hasGravisuit(player);
+                Boolean hasSet = ItemArmorNuclearGravisuit.hasGravisuit(player);
                 if (playersWithSet.contains(key)) {
                     if (!hasSet) {
                         player.stepHeight = 0.6F;

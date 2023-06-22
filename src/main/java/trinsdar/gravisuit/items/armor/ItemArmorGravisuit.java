@@ -199,7 +199,7 @@ public class ItemArmorGravisuit extends ItemArmorQuantumSuit implements IIndirec
                     --jetpackTicker;
                     nbt.setByte("JetpackTicker", jetpackTicker);
                 }
-                if (!player.capabilities.isCreativeMode && !player.isSpectator()){
+                if (!player.capabilities.isCreativeMode && !player.isSpectator() && !player.onGround){
                     if (handler.quantumArmorBoostSprint && player.isSprinting() && ItemArmorGravisuit.hasQuantumLegs(player)){
                         this.useEnergy(player, stack, 1024);
                     }else {
@@ -209,24 +209,23 @@ public class ItemArmorGravisuit extends ItemArmorQuantumSuit implements IIndirec
                         nbt.setBoolean("ResetFlying", true);
                     }
                 }
-                player.capabilities.allowFlying = true;
-                player.stepHeight = 1.0625F;
-                boolean flying = player.capabilities.isFlying;
-                if(flying){
-                    boolean sneaking = player.isSneaking();
+                if (player.onGround) {
+                    player.capabilities.allowFlying = true;
+                    player.stepHeight = 1.0625F;
+                    boolean flying = player.capabilities.isFlying;
+                    if (flying) {
+                        boolean sneaking = player.isSneaking();
 
-                    float speed = 0.08f
-                            * (flying ? 0.6f : 1.0f)
-                            * (sneaking ? 0.1f : 1.0f);
+                        float speed = 0.08f * (flying ? 0.6f : 1.0f) * (sneaking ? 0.1f : 1.0f);
 
-                    if (player.moveForward > 0f) {
-                        player.moveRelative(0f, 0f, 1f, speed);
-                    } else if (player.moveForward < 0f) {
-                        player.moveRelative(0f, 0f, 1f, -speed * 0.3f);
-                    }
-
-                    if (player.moveStrafing != 0f) {
-                        player.moveRelative(1f, 0f, 0f, speed * 0.5f * Math.signum(player.moveStrafing));
+                        if (player.moveForward > 0f) {
+                            player.moveRelative(0f, 0f, 1f, speed);
+                        } else if (player.moveForward < 0f) {
+                            player.moveRelative(0f, 0f, 1f, -speed * 0.3f);
+                        }
+                        if (player.moveStrafing != 0f) {
+                            player.moveRelative(1f, 0f, 0f, speed * 0.5f * Math.signum(player.moveStrafing));
+                        }
                     }
                 }
             }else {
