@@ -1,7 +1,6 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
         maven {
             name = "jitpack"
             setUrl("https://jitpack.io")
@@ -12,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath("com.github.GregTechCE:ForgeGradle:FG_2.3-SNAPSHOT") {
+        classpath("com.anatawa12.forge:ForgeGradle:2.3-1.0.+") {
             changing = true
         }
     }
