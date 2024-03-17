@@ -13,7 +13,6 @@ import ic2.core.platform.textures.obj.IStaticTexturedItem;
 import ic2.core.util.misc.StackUtil;
 import ic2.core.util.obj.ToolTipType;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -28,13 +27,13 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -162,11 +161,18 @@ public class ItemToolVajra extends ItemElectricTool implements IStaticTexturedIt
             ItemStack stack = player.getHeldItem(hand);
             if (ElectricItem.manager.getCharge(stack) >= getEnergyCost(stack) && shouldBreak(player, world, pos)) {
                 ElectricItem.manager.use(stack, this.getEnergyCost(stack), player);
-                world.destroyBlock(pos, true);
+                NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
+                boolean silkTouch = nbt.getBoolean("silkTouch");
+                Block block = world.getBlockState(pos).getBlock();
+                world.destroyBlock(pos, !silkTouch);
+                if (silkTouch) {
+                    Block.spawnAsEntity(world, pos, new ItemStack(Item.getItemFromBlock(block)));
+                }
                 world.removeTileEntity(pos);
                 return EnumActionResult.SUCCESS;
             }
         }
+        player.swingArm(hand);
         return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
     }
 
