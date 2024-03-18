@@ -8,13 +8,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RenderGUIHandler {
-
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void onRenderGui(RenderGameOverlayEvent.Post event)
-    {
-    	if (event.getType() != ElementType.EXPERIENCE) return;
-    	new GUIHandler(Minecraft.getMinecraft());
+    public void onRenderGui(RenderGameOverlayEvent.Post event) {
+        if (event.getType() != ElementType.EXPERIENCE) return;
+        new GUIHandler(Minecraft.getMinecraft());
     }
-
 }
