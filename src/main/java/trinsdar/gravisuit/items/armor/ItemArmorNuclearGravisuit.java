@@ -91,13 +91,12 @@ public class ItemArmorNuclearGravisuit extends ItemArmorQuantumSuit implements I
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
         if (playerIn.isSneaking()) {
+            return super.onItemRightClick(worldIn, playerIn, hand);
+        } else {
             if (IC2.platform.isSimulating()) {
                 IC2.platform.launchGui(playerIn, this.getInventory(playerIn, hand, playerIn.getHeldItem(hand)), hand);
             }
-
             return ActionResult.newResult(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
-        } else {
-            return super.onItemRightClick(worldIn, playerIn, hand);
         }
     }
 
