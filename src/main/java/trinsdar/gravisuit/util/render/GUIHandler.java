@@ -33,8 +33,8 @@ public class GUIHandler extends Gui {
     private final Minecraft mc;
     private final ScaledResolution scaledResolution;
     private final EntityPlayer player;
-    private final ItemStack armorStack;
-    private final Item itemArmor;
+    private ItemStack armorStack;
+    private Item itemArmor;
     private String statusString;
 
     public GUIHandler(Minecraft mc) {
@@ -109,9 +109,9 @@ public class GUIHandler extends Gui {
     }
 
     private void handleBaublesRendering(int yPos1, int yPos2) {
-        ItemStack baublesArmorStack = BaublesLoader.getBaublesChestSlot(player);
-        Item baublesItemArmor = baublesArmorStack.getItem();
-        if (!baublesArmorStack.isEmpty() && isJetpackOrLappack(baublesItemArmor)) {
+        armorStack = BaublesLoader.getBaublesChestSlot(player);
+        itemArmor = armorStack.getItem();
+        if (!armorStack.isEmpty() && isJetpackOrLappack(itemArmor)) {
             handleJetpackRendering(yPos1, yPos2);
         }
     }
