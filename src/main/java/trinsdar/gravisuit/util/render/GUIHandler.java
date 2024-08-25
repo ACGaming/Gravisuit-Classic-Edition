@@ -67,7 +67,7 @@ public class GUIHandler extends Gui {
 
     private void handleJetpackRendering(int yPos1, int yPos2) {
         int currCharge = getCharge(armorStack);
-        int energyStatus = (int) (currCharge / ((IElectricItem) itemArmor).getMaxCharge(armorStack) * 100);
+        int energyStatus = itemArmor instanceof IElectricItem ? (int) (currCharge / ((IElectricItem) itemArmor).getMaxCharge(armorStack) * 100) : -1;
         if (player.ticksExisted % 20 == 0) {
             energyLevelString = ENERGY_LEVEL_NAME + energyStatus;
             energyTextColor = getEnergyTextColor(energyStatus);
