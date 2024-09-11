@@ -161,13 +161,9 @@ public class ItemToolVajra extends ItemElectricTool implements IStaticTexturedIt
             ItemStack stack = player.getHeldItem(hand);
             if (ElectricItem.manager.getCharge(stack) >= getEnergyCost(stack) && shouldBreak(player, world, pos)) {
                 ElectricItem.manager.use(stack, this.getEnergyCost(stack), player);
-                NBTTagCompound nbt = StackUtil.getOrCreateNbtData(stack);
-                boolean silkTouch = nbt.getBoolean("silkTouch");
                 Block block = world.getBlockState(pos).getBlock();
-                world.destroyBlock(pos, !silkTouch);
-                if (silkTouch) {
-                    Block.spawnAsEntity(world, pos, new ItemStack(Item.getItemFromBlock(block)));
-                }
+                block.harvestBlock(world, player, pos, world.getBlockState(pos), null, stack);
+                world.destroyBlock(pos, false);
                 world.removeTileEntity(pos);
                 return EnumActionResult.SUCCESS;
             }
