@@ -13,7 +13,6 @@ import ic2.core.platform.textures.obj.IStaticTexturedItem;
 import ic2.core.util.misc.StackUtil;
 import ic2.core.util.obj.ToolTipType;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.enchantment.Enchantment;
@@ -27,7 +26,6 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -136,33 +134,15 @@ public class ItemToolVajra extends ItemElectricTool implements IStaticTexturedIt
         ctrlTip.add(Ic2Lang.pressTo.getLocalizedFormatted(IC2.keyboard.getKeyName(2), GravisuitLang.vajraSilktouchToggle.getLocalized()));
     }
 
-    private boolean shouldBreak(EntityPlayer playerIn, World worldIn, BlockPos pos) {
-        IBlockState blockState = worldIn.getBlockState(pos);
-        if (blockState.getMaterial() == Material.AIR) {
-            return false;
-        }
-        if (blockState.getMaterial().isLiquid()) {
-            return false;
-        }
-        float blockHardness = blockState.getBlockHardness(worldIn, pos);
-        if (blockHardness < 0) {
-            return false;
-        }
-        if (!blockState.getBlock().canHarvestBlock(worldIn, pos, playerIn)){
-            return false;
-        }
-
-        return true;
-    }
-
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             ItemStack stack = player.getHeldItem(hand);
-            if (ElectricItem.manager.getCharge(stack) >= getEnergyCost(stack) && shouldBreak(player, world, pos)) {
+            if (ElectricItem.manager.getCharge(stack) >= getEnergyCost(stack) && ForgeHooks.canToolHarvestBlock(world, pos, stack)) {
                 ElectricItem.manager.use(stack, this.getEnergyCost(stack), player);
-                Block block = world.getBlockState(pos).getBlock();
-                block.harvestBlock(world, player, pos, world.getBlockState(pos), null, stack);
+                IBlockState blockState = world.getBlockState(pos);
+                Block block = blockState.getBlock();
+                block.harvestBlock(world, player, pos, blockState, null, stack);
                 world.destroyBlock(pos, false);
                 world.removeTileEntity(pos);
                 return EnumActionResult.SUCCESS;
@@ -203,8 +183,7 @@ public class ItemToolVajra extends ItemElectricTool implements IStaticTexturedIt
 
     @Override
     public int getExtraSpeed(ItemStack d) {
-        int pointBoost = this.getPointBoost(d);
-        return 0 + pointBoost;
+        return this.getPointBoost(d);
     }
 
     private int getPointBoost(ItemStack drill) {
@@ -214,8 +193,7 @@ public class ItemToolVajra extends ItemElectricTool implements IStaticTexturedIt
 
     @Override
     public int getExtraEnergyCost(ItemStack d) {
-        int points = this.getEnergyChange(d);
-        return points > 0 ? points : 0;
+        return Math.max(this.getEnergyChange(d), 0);
     }
 
     public int getEnergyChange(ItemStack drill) {
@@ -228,7 +206,7 @@ public class ItemToolVajra extends ItemElectricTool implements IStaticTexturedIt
 
     @Override
     public void useDrill(ItemStack d) {
-        ElectricItem.manager.use(d, this.getEnergyCost(d), (EntityLivingBase) null);
+        ElectricItem.manager.use(d, this.getEnergyCost(d), null);
     }
 
     @Override
